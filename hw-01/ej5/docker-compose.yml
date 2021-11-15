@@ -1,0 +1,42 @@
+version: "3.6"
+services:
+  elasticsearch:
+    # Utilizar la imagen de elasticsearch v7.9.3  
+    image: elasticsearch:7.9.3
+    # Asignar un nombre al contenedor 
+    container_name: elasticsearch-container
+    # Define las siguientes variables de entorno: 
+    # discovery.type=single-node 
+    environment:
+      - xpack.security.enabled=false
+      - "discovery.type=single-node"
+    # Emplazar el contenedor a la red de elastic
+    networks:
+      - elastic
+    # Mapea el Puerto externo 9200 al puerto interno del contenedor 9200   
+    # Idem para el puerto 9300 
+    ports:
+      - 9200:9200
+  kibana:
+    # Utilizar la imagen kibana v7.9.3 
+    image: kibana:7.9.3
+    # Asignar un nombre al contenedor
+    container_name: kibana-container
+    # Emplazar el contenedor a la red de elastic
+    networks:
+      - elastic
+    # Define las siguientes variables de entorno: 
+    # ELASTICSEARCH_HOST=elasticsearch 
+    # ELASTICSEARCH_PORT=9200
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+    # Mapear el puerto externo 5601 al puerto interno 5601
+    ports:
+      - 5601:5601
+# El contenedor Kibana depe esperar a la disponibilidad del servicio elasticsearch  ... 
+networks:
+  elastic:
+    # Definir la red elastic (bridge) 
+    driver: bridge
