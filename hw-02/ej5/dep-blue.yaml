@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-dep-blue
+  labels:
+    app: nginx-server
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx-server-blue
+  template:
+    metadata:
+      labels:
+        app: nginx-server-blue
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.19.4-alpine
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "100m"

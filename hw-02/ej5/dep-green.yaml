@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-dep-green
+  labels:
+    app: nginx-server
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx-server-green
+  template:
+    metadata:
+      labels:
+        app: nginx-server-green
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.20-alpine
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "100m"
